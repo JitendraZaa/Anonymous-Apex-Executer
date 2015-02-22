@@ -27,7 +27,7 @@ public class ExecuteAnonymous  extends javax.swing.JFrame {
     /**
      * Use the Log window of Main Window
      */
-    public LogWindow log = null;
+    public static LogWindow log = null;
     
     /**
      * Creates new form ExecuteAnonymous
@@ -106,15 +106,15 @@ public class ExecuteAnonymous  extends javax.swing.JFrame {
 
         jLabel1.setText("Loop");
 
-        txtLoopTimes.setText("3000");
+        txtLoopTimes.setText("1");
 
-        txtPause.setText("400");
+        txtPause.setText("0");
 
         jLabel5.setText("Pause (ms)");
 
         txtCode.setColumns(20);
         txtCode.setRows(5);
-        txtCode.setText("List<PSS_Product_Selected__c> lstProductSelected = [SELECT  PSS_Opportunity__c, \n                                                    PSS_Opportunity__r.Rate_Only_renewal__c , \n\t\t\t\t\t\t\t\t\t\t\t\t\tPSS_Opportunity__r.PSUID_Text__c ,                                                                                                                                                                                                   \n                                                    TPID__c FROM PSS_Product_Selected__c \n                                                    WHERE TPID__c != null  \n                                                    AND \n                                                    PSS_Opportunity__r.Rate_Only_renewal__c = false\n\t\t\t\t\t\t\t\t\t\t\t\t\tAND\n\t\t\t\t\t\t\t\t\t\t\t\t\tPSS_Opportunity__r.PSUID_Text__c != null\n\t\t\t\t\t\t\t\t\t\t\t\t\tAND\n\t\t\t\t\t\t\t\t\t\t\t\t\tPSS_Opportunity__r.Developer_Note__c = null\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t];\nSystem.debug('** Count **'+lstProductSelected.size());\n\n//PSS Opp - Key, TPID - Value\nMap<Id,Set<String>> mpPSSOpp = new Map<Id,Set<String>>();\n\n//PSS Opp - Key , PSUID - Value\nMap<Id,Decimal> mpPSSOpp_PSUID = new Map<Id,Decimal>();\n\n\n\n\nfor(PSS_Product_Selected__c p : lstProductSelected)\n{\n\tSet<String> setTPIDOnOpp = mpPSSOpp.get(p.PSS_Opportunity__c);\n\t\n\tif(setTPIDOnOpp == null)\n\t\tsetTPIDOnOpp = new Set<String>();\n\t\n\tsetTPIDOnOpp.add(p.TPID__c);               \n\tmpPSSOpp.put(p.PSS_Opportunity__c, setTPIDOnOpp) ;\n\tmpPSSOpp_PSUID.put(p.PSS_Opportunity__c, Decimal.valueOf( p.PSS_Opportunity__r.PSUID_Text__c) );\n}\n\n//COmplete only 1 PSS Opp at a time and then Break\nfor(String pssOppId : mpPSSOpp.keyset())\n{\n\tSet<String> setTPIDOnOpp = mpPSSOpp.get(pssOppId) ;\n\tSet<String> activeTPIDSet = new set<String>() ; \n\t\n\tList<PSS_Plan_Summary__c> p = [Select \n\t\t\t\t\t\t\t\t\t\tPlan_Id__c \n\t\t\t\t\t\t\t\t\tFROM \n\t\t\t\t\t\t\t\t\t\tPSS_Plan_Summary__c \n\t\t\t\t\t\t\t\t\tWHERE \n\t\t\t\t\t\t\t\t\t\tPlan_Id__c IN :setTPIDOnOpp \n\t\t\t\t\t\t\t\t\tAND \n\t\t\t\t\t\t\t\t\t\tStatus__c != 'CANCEL' \n\t\t\t\t\t\t\t\t\tAND \n\t\t\t\t\t\t\t\t\t\tStatus__c != 'PURGE'\n\t\t\t\t\t\t\t\t\tAND \n\t\t\t\t\t\t\t\t\t\tStatus__c != 'DELETE'\n\t\t\t\t\t\t\t\t\tAND \n\t\t\t\t\t\t\t\t\t\tPSUID__c = :mpPSSOpp_PSUID.get(pssOppId)] ;\n\tfor(PSS_Plan_Summary__c pObj : p)\n\t{\n\t\tactiveTPIDSet.add(pObj.Plan_Id__c);\n\t}\n\tif(setTPIDOnOpp.size() == activeTPIDSet.size())\n\t{\n\t\tPSS_opportunity__c psstoUpdate = new PSS_opportunity__c(Id=pssOppId, Rate_Only_renewal__c = true, Developer_Note__c = 'Processed by Renewal Script');\n\t\tupdate psstoUpdate ;\n\t\tSystem.debug('*** Its Rate Only Renewal and record being updated is ***'+pssOppId);\n\t\tSystem.debug('*** TPID in PSS Opp ***'+setTPIDOnOpp.size());\n\t\tSystem.debug('*** Active TPID ***'+activeTPIDSet.size());\n\t\t\t\t\n\t}else{ \n\t\tPSS_opportunity__c psstoUpdate = new PSS_opportunity__c(Id=pssOppId, Developer_Note__c = 'Processed by Renewal Script' );\n\t\tupdate psstoUpdate ;\n\t\t\n\t\tSystem.debug('*** NOT Rate Only Renewal and record being updated is ***'+pssOppId);\n\t\tSystem.debug('*** TPID in PSS Opp ***'+setTPIDOnOpp.size());\n\t\tSystem.debug('*** Active TPID ***'+activeTPIDSet.size());\n\t}\n\tbreak; \n}\nSystem.debug('** PSS Opp Count **'+mpPSSOpp.keyset().size());\n");
+        txtCode.setText("System.debug('Hello World');");
         jScrollPane1.setViewportView(txtCode);
 
         btnExecute.setBackground(new java.awt.Color(204, 204, 204));
@@ -258,7 +258,7 @@ public class ExecuteAnonymous  extends javax.swing.JFrame {
                     public void run(){
                         try{
                             log.setVisible(true);
-                            
+                            log.messageln("Login using - "+txtUserName.getText());
                             SoapConnection toolCon =  new Util().login(txtUserName.getText(), new String(txtPasword.getPassword()), chkIsSandBox.isSelected(),
                                     txtProxyAddress.getText(), txtPort.getText(), txtProxyUser.getText(), new String(txtProxyPassword.getPassword()) ) ;
                              
@@ -281,9 +281,10 @@ public class ExecuteAnonymous  extends javax.swing.JFrame {
                                 if(pauseInMili > 0)
                                 {
                                     Thread.sleep(pauseInMili);
-                                    log.messageln(".... Pause - "+pauseInMili+" , Loop completed -> "+ counter 
-                                                    +", Remaining Counter -> "+ (loopCounter - counter));
+                                    log.messageln(".... Pause - "+pauseInMili);
                                 }
+                                log.messageln("Loop completed -> "+ counter 
+                                                    +", Remaining Counter -> "+ (loopCounter - counter));
                             } 
                             log.messageln("All Anonymous Code is executed succesfully");
                         }catch(Exception e)
@@ -376,6 +377,12 @@ public class ExecuteAnonymous  extends javax.swing.JFrame {
      */
     private boolean validateInputs() {
         try { 
+            if(txtLoopTimes.getText().trim().equals(""))
+                txtLoopTimes.setText("1");
+            
+            if(txtPause.getText().trim().equals(""))
+                txtPause.setText("0");
+            
             Integer.parseInt(txtLoopTimes.getText()); 
             Integer.parseInt(txtPause.getText()); 
         } catch(NumberFormatException e) { 

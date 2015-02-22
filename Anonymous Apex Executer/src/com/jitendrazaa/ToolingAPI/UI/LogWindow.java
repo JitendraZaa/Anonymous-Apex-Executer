@@ -120,7 +120,6 @@ public class LogWindow   extends javax.swing.JFrame {
         txtLog = new javax.swing.JTextArea();
         jSeparator1 = new javax.swing.JSeparator();
         btnScroll_Lock = new javax.swing.JButton();
-        btnSaveLog = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
 
         folderChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
@@ -140,13 +139,6 @@ public class LogWindow   extends javax.swing.JFrame {
         btnScroll_Lock.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnScroll_LockActionPerformed(evt);
-            }
-        });
-
-        btnSaveLog.setText("Save Log");
-        btnSaveLog.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveLogActionPerformed(evt);
             }
         });
 
@@ -170,9 +162,7 @@ public class LogWindow   extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 656, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(145, 145, 145)
-                        .addComponent(btnSaveLog)
-                        .addGap(18, 18, 18)
+                        .addGap(248, 248, 248)
                         .addComponent(btnScroll_Lock)
                         .addGap(18, 18, 18)
                         .addComponent(btnClear)
@@ -189,7 +179,6 @@ public class LogWindow   extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnScroll_Lock)
-                    .addComponent(btnSaveLog)
                     .addComponent(btnClear))
                 .addContainerGap(24, Short.MAX_VALUE))
         );
@@ -201,33 +190,12 @@ private void btnScroll_LockActionPerformed(java.awt.event.ActionEvent evt) {//GE
         scrollLock = !scrollLock;
 }//GEN-LAST:event_btnScroll_LockActionPerformed
 
-private void btnSaveLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveLogActionPerformed
-      
-    int returnVal = folderChooser.showSaveDialog(this);
-    if (returnVal == JFileChooser.APPROVE_OPTION) {
-        try
-        {
-            File file = folderChooser.getSelectedFile();            
-            FileWriter fw = new FileWriter(file, false);
-            fw.write(txtLog.getText());
-            fw.flush();
-            fw.close();
-            Util.showMessage(this, "File "+file.getName()+" saved Successfully !!!");
-        }catch(Exception e)
-        {
-            Util.showMessage(this, e.getMessage());
-        }
-
-    }
-}//GEN-LAST:event_btnSaveLogActionPerformed
-
 private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
     resetLogText();
 }//GEN-LAST:event_btnClearActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;
-    private javax.swing.JButton btnSaveLog;
     private javax.swing.JButton btnScroll_Lock;
     private javax.swing.JFileChooser folderChooser;
     private javax.swing.JScrollPane jScrollPane1;

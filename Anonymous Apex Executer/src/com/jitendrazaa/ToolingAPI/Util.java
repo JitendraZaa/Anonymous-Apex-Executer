@@ -5,6 +5,9 @@
  */
 package com.jitendrazaa.ToolingAPI;
 
+import com.jitendrazaa.ToolingAPI.UI.ExecuteAnonymous;
+import static com.jitendrazaa.ToolingAPI.UI.ExecuteAnonymous.log;
+import com.jitendrazaa.ToolingAPI.UI.LogWindow;
 import com.sforce.soap.partner.LoginResult;
 import com.sforce.soap.partner.PartnerConnection;
 import com.sforce.soap.tooling.SoapConnection;
@@ -17,6 +20,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -24,16 +28,15 @@ import javax.swing.JOptionPane;
  */
 public class Util {
  
-
     private static final double APIVersion = 33.0;
 
     private static final String productionAPIPath = "https://login.salesforce.com/services/Soap/u/" + String.valueOf(APIVersion) + "/";
     private static final String sandBoxAPIPath = "https://test.salesforce.com/services/Soap/u/" + String.valueOf(APIVersion) + "/";
- 
 
     /**
      * This Utility method is used center position Window
      *
+     * @param frm
      * @param JFrame to Center
      */
     public static void centerWindow(JFrame frm) {
@@ -97,8 +100,7 @@ public class Util {
     ) throws ConnectionException {
 
         ConnectorConfig config = getConfigForLogin(userName, password, isSandbox,
-                proxyAddress, port, proxyUserName, proxyPassword);
-
+                proxyAddress, port, proxyUserName, proxyPassword); 
         LoginResult loginResult = (new PartnerConnection(config)).login(userName, password);
         config.setServiceEndpoint(getToolingAPIURLFromMetadata(loginResult.getMetadataServerUrl()));
         config.setSessionId(loginResult.getSessionId());
@@ -130,14 +132,14 @@ public class Util {
                 config.setAuthEndpoint(productionAPIPath);
             }
 
-			// config.setTraceFile("src/"+sfdcUserName+".txt");
+            // config.setTraceFile("src/"+sfdcUserName+".txt");
             if (proxyAddress != null && !proxyAddress.trim().equals("")) {
                 config.setProxy(proxyAddress, Integer.valueOf(port));
                 config.setProxyUsername(proxyUserName);
                 config.setProxyPassword(proxyPassword);
             }
-        } catch (Exception fnfe) {
-            fnfe.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return config;
     }
