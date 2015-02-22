@@ -1,14 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * @author  Jitendra Zaa
+ * @Website http://JitendraZaa.com
+ * @GitHub https://github.com/JitendraZaa
+ * @Date 02-22-2015
+ * 
  */
 package com.jitendrazaa.ToolingAPI.UI;
 
- 
 import com.jitendrazaa.ToolingAPI.Util;
-import com.sforce.soap.tooling.ExecuteAnonymousResult;
-import com.sforce.soap.tooling.SoapConnection;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -17,45 +16,42 @@ import java.io.FileWriter;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
- 
+
 /**
  *
  * @author Jitendra
  */
-public class ExecuteAnonymous  extends javax.swing.JFrame {
+public class LaunchWindow extends javax.swing.JFrame {
 
     /**
      * Use the Log window of Main Window
      */
     public static LogWindow log = null;
-    
+
     /**
      * Creates new form ExecuteAnonymous
      */
-    public ExecuteAnonymous() {
-        initComponents(); 
+    public LaunchWindow() {
+        initComponents();
         Util.centerWindow(this);
-        instantiateLogWindow(); 
+        instantiateLogWindow();
         refreshSettings();
     }
-    
-     /**
+
+    /**
      * This method is used to reload all the GUI Component Windows
      */
-    public final void refreshSettings()
-    { 
-        FileFilter apexClassType = new FileNameExtensionFilter("Apex Class (*.class)", "class") ;
+    public final void refreshSettings() {
+        FileFilter apexClassType = new FileNameExtensionFilter("Apex Class (*.class)", "class");
         folderChooser.setFileFilter(apexClassType);
         folderChooser.addChoosableFileFilter(apexClassType);
     }
-    
+
     /**
      * Instantiate the Log Window
      */
-    private void instantiateLogWindow()
-    {
-        if(log == null)
-        {
+    private void instantiateLogWindow() {
+        if (log == null) {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
@@ -248,51 +244,11 @@ public class ExecuteAnonymous  extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnExecuteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExecuteActionPerformed
-        
-        if(validateInputs())
-        {
-            
-            (new Thread()
-                {
-                    @Override
-                    public void run(){
-                        try{
-                            log.setVisible(true);
-                            log.messageln("Login using - "+txtUserName.getText());
-                            SoapConnection toolCon =  new Util().login(txtUserName.getText(), new String(txtPasword.getPassword()), chkIsSandBox.isSelected(),
-                                    txtProxyAddress.getText(), txtPort.getText(), txtProxyUser.getText(), new String(txtProxyPassword.getPassword()) ) ;
-                             
-                            int loopCounter = Integer.valueOf(txtLoopTimes.getText()) ;
-                            int pauseInMili = Integer.valueOf(txtPause.getText()) ;
-                            
-                            int counter = 0;
-                            
-                            while(counter < loopCounter)
-                            {
-                                ExecuteAnonymousResult result = toolCon.executeAnonymous(txtCode.getText());
-                                if(result.isCompiled())
-                                {
-                                    log.messageln("Code Executed succesfully");
-                                }
-                                else{
-                                    log.messageln(result.getCompileProblem());
-                                }
-                                counter++;
-                                if(pauseInMili > 0)
-                                {
-                                    Thread.sleep(pauseInMili);
-                                    log.messageln(".... Pause - "+pauseInMili);
-                                }
-                                log.messageln("Loop completed -> "+ counter 
-                                                    +", Remaining Counter -> "+ (loopCounter - counter));
-                            } 
-                            log.messageln("All Anonymous Code is executed succesfully");
-                        }catch(Exception e)
-                        {
-                            log.messageln(Util.stackTraceToString(e));
-                        }
-                    }
-                }).start();
+
+        if (validateInputs()) {
+            Util.execute(txtUserName.getText(), new String(txtPasword.getPassword()), chkIsSandBox.isSelected(),
+                    txtProxyAddress.getText(), txtPort.getText(), txtProxyUser.getText(), new String(txtProxyPassword.getPassword()),
+                    txtLoopTimes.getText(), txtPause.getText(), txtCode.getText());
         }
     }//GEN-LAST:event_btnExecuteActionPerformed
 
@@ -300,40 +256,36 @@ public class ExecuteAnonymous  extends javax.swing.JFrame {
         int returnVal = folderChooser.showOpenDialog(this);
         if (returnVal == folderChooser.APPROVE_OPTION) {
             File file = folderChooser.getSelectedFile();
-            try
-            {
+            try {
                 BufferedReader in = new BufferedReader(new FileReader(file));
                 String line = in.readLine();
-                while(line != null){
-                  txtCode.append(line + "\n");
-                  line = in.readLine();
-                } 
+                while (line != null) {
+                    txtCode.append(line + "\n");
+                    line = in.readLine();
+                }
                 in.close();
-            }catch(Exception e)
-            {
-                Util.showMessage(this, "Error - "+e.getMessage());
+            } catch (Exception e) {
+                Util.showMessage(this, "Error - " + e.getMessage());
             }
         }
     }//GEN-LAST:event_btnBrowseActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        File locatonToSave = getSaveLocation() ;
-        if( locatonToSave != null)
-        {
-            try{
+        File locatonToSave = getSaveLocation();
+        if (locatonToSave != null) {
+            try {
                 BufferedWriter writer = new BufferedWriter(new FileWriter(locatonToSave, true)); // true for append
                 txtCode.write(writer);
                 writer.close();
                 Util.showMessage(this, "Code Saved!!!");
-            }catch(Exception e)
-            {
-                Util.showMessage(this, "Error - "+e.getMessage());
+            } catch (Exception e) {
+                Util.showMessage(this, "Error - " + e.getMessage());
             }
-        } 
+        }
     }//GEN-LAST:event_btnSaveActionPerformed
- 
-    private File getSaveLocation() { 
-        folderChooser.setFileSelectionMode(folderChooser.FILES_ONLY); 
+
+    private File getSaveLocation() {
+        folderChooser.setFileSelectionMode(folderChooser.FILES_ONLY);
         folderChooser.setSelectedFile(new File("AnonyousCode.class"));
         int result = folderChooser.showSaveDialog(this);
 
@@ -373,22 +325,25 @@ public class ExecuteAnonymous  extends javax.swing.JFrame {
 
     /**
      * Validate if input is valid
-     * @return 
+     *
+     * @return
      */
     private boolean validateInputs() {
-        try { 
-            if(txtLoopTimes.getText().trim().equals(""))
+        try {
+            if (txtLoopTimes.getText().trim().equals("")) {
                 txtLoopTimes.setText("1");
-            
-            if(txtPause.getText().trim().equals(""))
+            }
+
+            if (txtPause.getText().trim().equals("")) {
                 txtPause.setText("0");
-            
-            Integer.parseInt(txtLoopTimes.getText()); 
-            Integer.parseInt(txtPause.getText()); 
-        } catch(NumberFormatException e) { 
+            }
+
+            Integer.parseInt(txtLoopTimes.getText());
+            Integer.parseInt(txtPause.getText());
+        } catch (NumberFormatException e) {
             Util.showMessage(this, "Error : Loop Counter and Pause must be valid numbers ");
-            return false; 
+            return false;
         }
-        return true ;
+        return true;
     }
 }

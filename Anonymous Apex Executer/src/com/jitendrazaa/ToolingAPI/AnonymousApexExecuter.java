@@ -1,11 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * @author  Jitendra Zaa
+ * @Website http://JitendraZaa.com
+ * @GitHub https://github.com/JitendraZaa
+ * @Date 02-22-2015
+ * 
  */
 package com.jitendrazaa.ToolingAPI;
 
-import com.jitendrazaa.ToolingAPI.UI.ExecuteAnonymous;
+import com.jitendrazaa.ToolingAPI.UI.LaunchWindow;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
@@ -25,7 +27,7 @@ public class AnonymousApexExecuter {
             java.awt.EventQueue.invokeLater(new Runnable() {
 
                 public void run() {
-                    ExecuteAnonymous win = new ExecuteAnonymous();
+                    LaunchWindow win = new LaunchWindow();
                     win.setVisible(true);
                         //new TableDemo().setVisible(true);
                     //new SecurityMatrix().setVisible(true);

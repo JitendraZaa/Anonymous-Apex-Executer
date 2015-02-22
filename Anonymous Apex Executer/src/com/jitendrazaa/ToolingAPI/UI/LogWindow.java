@@ -1,18 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * LogWindow.java
- *
- * Created on Jul 10, 2012, 5:20:29 PM
+/**
+ * @author  Jitendra Zaa
+ * @Website http://JitendraZaa.com
+ * @GitHub https://github.com/JitendraZaa
+ * @Date 02-22-2015
+ * 
  */
 package com.jitendrazaa.ToolingAPI.UI;
 
 import com.jitendrazaa.ToolingAPI.Util;
-import java.io.File;
-import java.io.FileWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,7 +15,6 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
-import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
 
 /**

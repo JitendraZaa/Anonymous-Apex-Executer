@@ -1,33 +1,32 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * @author  Jitendra Zaa
+ * @Website http://JitendraZaa.com
+ * @GitHub https://github.com/JitendraZaa
+ * @Date 02-22-2015
+ * 
  */
 package com.jitendrazaa.ToolingAPI;
 
-import com.jitendrazaa.ToolingAPI.UI.ExecuteAnonymous;
-import static com.jitendrazaa.ToolingAPI.UI.ExecuteAnonymous.log;
-import com.jitendrazaa.ToolingAPI.UI.LogWindow;
+import static com.jitendrazaa.ToolingAPI.UI.LaunchWindow.log;
 import com.sforce.soap.partner.LoginResult;
 import com.sforce.soap.partner.PartnerConnection;
+import com.sforce.soap.tooling.ExecuteAnonymousResult;
 import com.sforce.soap.tooling.SoapConnection;
 import com.sforce.ws.ConnectionException;
 import com.sforce.ws.ConnectorConfig;
 import java.awt.Dimension;
-import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 
 /**
  *
  * @author Jitendra Zaa , visit @ http://JitendraZaa.com
  */
 public class Util {
- 
+
     private static final double APIVersion = 33.0;
 
     private static final String productionAPIPath = "https://login.salesforce.com/services/Soap/u/" + String.valueOf(APIVersion) + "/";
@@ -83,6 +82,59 @@ public class Util {
     }
 
     /**
+     * Utility method to start Authentication and execution of code
+     * @param userName
+     * @param password
+     * @param isSandBox
+     * @param proxyAddress
+     * @param proxyPort
+     * @param proxyUserName
+     * @param proxyPassword
+     * @param totalLoop
+     * @param pause
+     * @param sourceCode 
+     */
+    public static void execute(String userName, String password, boolean isSandBox,
+            String proxyAddress, String proxyPort, String proxyUserName, String proxyPassword,
+            String totalLoop, String pause, String sourceCode) {
+        (new Thread() {
+            @Override
+            public void run() {
+                try {
+                    log.setVisible(true);
+                    log.messageln("Login using - " + userName);
+                    SoapConnection toolCon = new Util().login(userName, password, isSandBox,
+                            proxyAddress, proxyPort, proxyUserName, proxyPassword);
+
+                    int loopCounter = Integer.valueOf(totalLoop);
+                    int pauseInMili = Integer.valueOf(pause);
+
+                    int counter = 0;
+
+                    while (counter < loopCounter) {
+                        ExecuteAnonymousResult result = toolCon.executeAnonymous(sourceCode);
+                        if (result.isCompiled()) {
+                            log.messageln("Code Executed succesfully");
+                        } else {
+                            log.messageln(result.getCompileProblem());
+                        }
+                        counter++;
+                        if (pauseInMili > 0) {
+                            Thread.sleep(pauseInMili);
+                            log.messageln(".... Pause - " + pauseInMili);
+                        }
+                        log.messageln("Loop completed -> " + counter
+                                + ", Remaining Counter -> " + (loopCounter - counter));
+                    }
+                    log.messageln("All Anonymous Code is executed succesfully");
+                } catch (Exception e) {
+                    log.messageln(Util.stackTraceToString(e));
+                }
+            }
+        }).start();
+    }
+
+    /**
      * Utility method to login for Tooling API
      *
      * @param userName
@@ -100,7 +152,7 @@ public class Util {
     ) throws ConnectionException {
 
         ConnectorConfig config = getConfigForLogin(userName, password, isSandbox,
-                proxyAddress, port, proxyUserName, proxyPassword); 
+                proxyAddress, port, proxyUserName, proxyPassword);
         LoginResult loginResult = (new PartnerConnection(config)).login(userName, password);
         config.setServiceEndpoint(getToolingAPIURLFromMetadata(loginResult.getMetadataServerUrl()));
         config.setSessionId(loginResult.getSessionId());
