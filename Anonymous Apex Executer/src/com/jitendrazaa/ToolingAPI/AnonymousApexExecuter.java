@@ -1,5 +1,4 @@
-/**
- * @author  Jitendra Zaa
+/** 
  * @Website http://JitendraZaa.com
  * @GitHub https://github.com/JitendraZaa
  * @Date 02-22-2015
@@ -8,9 +7,9 @@
 package com.jitendrazaa.ToolingAPI;
 
 import com.jitendrazaa.ToolingAPI.UI.LaunchWindow;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.jitendrazaa.ToolingAPI.UI.LogWindow;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -18,6 +17,8 @@ import javax.swing.UIManager;
  */
 public class AnonymousApexExecuter {
 
+    public static LogWindow log = Utility.log;
+    
     /**
      * @param args the command line arguments
      */
@@ -28,13 +29,11 @@ public class AnonymousApexExecuter {
 
                 public void run() {
                     LaunchWindow win = new LaunchWindow();
-                    win.setVisible(true);
-                        //new TableDemo().setVisible(true);
-                    //new SecurityMatrix().setVisible(true);
+                    win.setVisible(true); 
                 }
             });
-        } catch (Exception ex) {
-            Logger.getLogger(AnonymousApexExecuter.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+            log.messageln(Utility.stackTraceToString(ex)); 
         }
     }
 

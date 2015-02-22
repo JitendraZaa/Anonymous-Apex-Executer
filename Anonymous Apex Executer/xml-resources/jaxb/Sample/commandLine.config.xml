@@ -1,0 +1,15 @@
+<!--
+	@Author : Jitendra Zaa
+	@Git	: https://github.com/JitendraZaa
+	@Website: http://JitendraZaa.com 
+	This configuration can be used start this program in Command-line mode.
+-->
+<apexconfig>
+	<username></username>
+	<password></password>
+	<proxyAddress></proxyAddress>
+	<proxyPort></proxyPort>
+	<proxyUserName></proxyUserName>
+	<proxyPassword></proxyPassword>
+	<apexFile></apexFile>
+</apexconfig>

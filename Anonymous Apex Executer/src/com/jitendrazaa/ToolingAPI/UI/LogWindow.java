@@ -1,5 +1,4 @@
-/**
- * @author  Jitendra Zaa
+/** 
  * @Website http://JitendraZaa.com
  * @GitHub https://github.com/JitendraZaa
  * @Date 02-22-2015
@@ -7,7 +6,7 @@
  */
 package com.jitendrazaa.ToolingAPI.UI;
 
-import com.jitendrazaa.ToolingAPI.Util;
+import com.jitendrazaa.ToolingAPI.Utility;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,7 +18,7 @@ import javax.swing.SwingUtilities;
 
 /**
  *
- * @author 315447
+ * @author Jitendra  
  */
 public class LogWindow   extends javax.swing.JFrame {
 
@@ -31,7 +30,7 @@ public class LogWindow   extends javax.swing.JFrame {
     public LogWindow() {
         
         initComponents(); 
-        Util.centerWindow(this);
+        Utility.centerWindow(this);
         resetLogText();
         if(LOGGER == null)
         {
@@ -47,7 +46,7 @@ public class LogWindow   extends javax.swing.JFrame {
             }catch(Exception e)
             {
                 messageln("failed to initialize Log file");
-                messageln(Util.stackTraceToString(e));
+                messageln(Utility.stackTraceToString(e));
             }
         } 
     } 
@@ -89,7 +88,7 @@ public class LogWindow   extends javax.swing.JFrame {
     	SwingUtilities.invokeLater(new Runnable()
     	{
     	    public void run()
-    	    {
+    	    { 
     	    	txtLog.append(m+"\n");
                 LOGGER.info(m);
                 if(!scrollLock)

@@ -1,5 +1,4 @@
-/**
- * @author  Jitendra Zaa
+/** 
  * @Website http://JitendraZaa.com
  * @GitHub https://github.com/JitendraZaa
  * @Date 02-22-2015
@@ -7,13 +6,12 @@
  */
 package com.jitendrazaa.ToolingAPI.UI;
 
-import com.jitendrazaa.ToolingAPI.Util;
+import com.jitendrazaa.ToolingAPI.Utility;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -22,19 +20,15 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author Jitendra
  */
 public class LaunchWindow extends javax.swing.JFrame {
-
-    /**
-     * Use the Log window of Main Window
-     */
-    public static LogWindow log = null;
+ 
+    public static LogWindow log = Utility.log;
 
     /**
      * Creates new form ExecuteAnonymous
      */
     public LaunchWindow() {
         initComponents();
-        Util.centerWindow(this);
-        instantiateLogWindow();
+        Utility.centerWindow(this); 
         refreshSettings();
     }
 
@@ -46,20 +40,7 @@ public class LaunchWindow extends javax.swing.JFrame {
         folderChooser.setFileFilter(apexClassType);
         folderChooser.addChoosableFileFilter(apexClassType);
     }
-
-    /**
-     * Instantiate the Log Window
-     */
-    private void instantiateLogWindow() {
-        if (log == null) {
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    log = new LogWindow();
-                }
-            });
-        }
-    }
+ 
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -246,7 +227,7 @@ public class LaunchWindow extends javax.swing.JFrame {
     private void btnExecuteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExecuteActionPerformed
 
         if (validateInputs()) {
-            Util.execute(txtUserName.getText(), new String(txtPasword.getPassword()), chkIsSandBox.isSelected(),
+            Utility.execute(txtUserName.getText(), new String(txtPasword.getPassword()), chkIsSandBox.isSelected(),
                     txtProxyAddress.getText(), txtPort.getText(), txtProxyUser.getText(), new String(txtProxyPassword.getPassword()),
                     txtLoopTimes.getText(), txtPause.getText(), txtCode.getText());
         }
@@ -265,7 +246,7 @@ public class LaunchWindow extends javax.swing.JFrame {
                 }
                 in.close();
             } catch (Exception e) {
-                Util.showMessage(this, "Error - " + e.getMessage());
+                Utility.showMessage(this, "Error - " + e.getMessage());
             }
         }
     }//GEN-LAST:event_btnBrowseActionPerformed
@@ -277,9 +258,9 @@ public class LaunchWindow extends javax.swing.JFrame {
                 BufferedWriter writer = new BufferedWriter(new FileWriter(locatonToSave, true)); // true for append
                 txtCode.write(writer);
                 writer.close();
-                Util.showMessage(this, "Code Saved!!!");
+                Utility.showMessage(this, "Code Saved!!!");
             } catch (Exception e) {
-                Util.showMessage(this, "Error - " + e.getMessage());
+                Utility.showMessage(this, "Error - " + e.getMessage());
             }
         }
     }//GEN-LAST:event_btnSaveActionPerformed
@@ -341,7 +322,7 @@ public class LaunchWindow extends javax.swing.JFrame {
             Integer.parseInt(txtLoopTimes.getText());
             Integer.parseInt(txtPause.getText());
         } catch (NumberFormatException e) {
-            Util.showMessage(this, "Error : Loop Counter and Pause must be valid numbers ");
+            Utility.showMessage(this, "Error : Loop Counter and Pause must be valid numbers ");
             return false;
         }
         return true;
