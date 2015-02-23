@@ -18,4 +18,14 @@ On this screen, we need to provide Username and Password of Salesforce organizat
 **Loop** In this textbox we need to indicate that for how many times this script needs to be executed ?
 **Pause** It may not be used frequently however if someone wants to wait for sometime before sending next request to execute code, that duration can be entered here in milliseconds
 
+###Features
+**Log Window**
+![Log Window](https://github.com/JitendraZaa/Anonymous-Apex-Executer/blob/master/Screens/Log%20Window.PNG "Log Window")
+Once user clicks on "Execute" button, above log window will appear with realtime status of request
+
+**Log Files**
+It also creates log file in background to see detailed informations like compiler errors
+
+**Save and Browse**
+
 
