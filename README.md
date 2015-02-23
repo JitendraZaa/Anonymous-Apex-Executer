@@ -28,9 +28,11 @@ Once user clicks on "Execute" button, below log window will appear with realtime
 
 
 **Log Files**
+
 It also creates log file in background to see detailed informations like compiler errors
 
 **Save and Browse**
+
 You can sabve your apex code on local system and then reuse it.
 
 ## Running in Command-line mode
@@ -57,12 +59,14 @@ You need to create "commandLine.config" file which will contain all settings req
 ```
 
 **How to run from commandline**
+
 To run from command-line, execute below statement in shell or command window
 ```shell
 java -cp Apex_Executer.jar  com.jitendrazaa.ToolingAPI.CommandLine
 ```
 
 **help command**
+
 To get information about sample xml file needed, run below command
 ```shell
 java -cp Apex_Executer.jar  com.jitendrazaa.ToolingAPI.CommandLine -help
