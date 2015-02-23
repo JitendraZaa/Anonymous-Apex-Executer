@@ -20,12 +20,50 @@ On this screen, we need to provide Username and Password of Salesforce organizat
 
 ###Features
 **Log Window**
+
+Once user clicks on "Execute" button, below log window will appear with realtime status of request
+
 ![Log Window](https://github.com/JitendraZaa/Anonymous-Apex-Executer/blob/master/Screens/Log%20Window.PNG "Log Window")
-Once user clicks on "Execute" button, above log window will appear with realtime status of request
+
+
 
 **Log Files**
 It also creates log file in background to see detailed informations like compiler errors
 
 **Save and Browse**
+You can sabve your apex code on local system and then reuse it.
 
+## Running in Command-line mode
 
+You may required to schedule your code to run after some interval. It can be done by creating shell script of batch file and use Operating system to schedule it.
+
+###commandLine.config
+You need to create "commandLine.config" file which will contain all settings required to run program.
+
+**Example of commandLine.config**
+```xml
+<apexconfig>
+	<username>salesforce username</username>
+	<password>salesforce password+Security token</password>
+	<isSandbox>false</isSandbox>
+	<proxyAddress>ip address of proxy server if applicable</proxyAddress>
+	<proxyPort>port of Proxy server</proxyPort>
+	<proxyUserName>proxy server username</proxyUserName>
+	<proxyPassword>proxy server password</proxyPassword>
+	<apexFile>location of source code to be executed</apexFile>
+	<repeat>total numbers of time to repeat</repeat>
+	<pause>interval between execution in milliseconds if needed</pause>
+</apexconfig>
+```
+
+**How to run from commandline**
+To run from command-line, execute below statement in shell or command window
+```shell
+java -cp Apex_Executer.jar  com.jitendrazaa.ToolingAPI.CommandLine
+```
+
+**help command**
+To get information about sample xml file needed, run below command
+```shell
+java -cp Apex_Executer.jar  com.jitendrazaa.ToolingAPI.CommandLine -help
+```
