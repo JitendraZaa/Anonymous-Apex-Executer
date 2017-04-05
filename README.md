@@ -14,11 +14,11 @@ To run this application using GUI, navigate to [dist](https://github.com/Jitendr
 
 On this screen, we need to provide Username and Password of Salesforce organization. If its Sandbox then checkbox "IsSandbox" needs to be checked. If you are using proxy settings then that information also needs to be provided.
 
-###Other parameters
+### Other parameters
 **Loop** In this textbox we need to indicate that for how many times this script needs to be executed ?
 **Pause** It may not be used frequently however if someone wants to wait for sometime before sending next request to execute code, that duration can be entered here in milliseconds
 
-###Features
+### Features
 **Log Window**
 
 Once user clicks on "Execute" button, below log window will appear with realtime status of request
